@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/desafio_sis_pag
+    username: user
+    password: password
+
