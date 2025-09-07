@@ -56,6 +56,15 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!--Flyway -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>11.12.0</version>
+			<scope>runtime</scope>
+		</dependency>
+
+
 		<!-- Tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
