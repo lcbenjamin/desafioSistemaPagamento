@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    container_name: postgres16
+    environment:
+      POSTGRES_DB: desafio_sis_pag
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: desafiopagamento
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DB_SERVER: db
+      DB_PORT: 5432
+      DB_NAME: desafio_sis_pag
+      DB_USER: user
+      DB_PASSWORD: password
+
+
+volumes:
+  pgdata:
