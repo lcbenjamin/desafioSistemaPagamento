@@ -40,7 +40,7 @@ public class WalletHolderEntity {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="wallet_id")
-    private WalletEntity trove;
+    private WalletEntity wallet;
 
 
 
