@@ -1,7 +1,8 @@
-package com.lucascosta.desafiopagamento.adapters.persistence.entity;
+package com.lucascosta.desafiopagamento.adapters.outbound.persistence.entity;
 
-import com.lucascosta.desafiopagamento.domain.model.enums.TransferStatus;
+import com.lucascosta.desafiopagamento.core.domain.payment.enums.TransferStatus;
 import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,18 +23,25 @@ public class TransferEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "payer_id")
     private Long payerId;
 
+    @Column(name = "payee_id")
     private Long payeeId;
 
-    private BigDecimal value;
+    @Column(name = "amount", precision = 18, scale = 2, nullable = false)
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20, columnDefinition = "varchar(20)")
     private TransferStatus status;
 
+    @Column(name = "created_at")
     private Instant createdAt;
 
+    @Column(name = "finished_at")
     private Instant finishedAt;
 
+    @Column(name = "failure_reason")
     private String failureReason;
 }

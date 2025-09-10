@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.adapters.persistence.entity;
+package com.lucascosta.desafiopagamento.adapters.outbound.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,16 +13,19 @@ import java.math.BigDecimal;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "wallet")
+@Table(name = "wallets")
 public class WalletEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "balance", precision = 18, scale = 2, nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
 
     @Version
+    @Column(name = "version")
     private Long version;
+
+
 }
