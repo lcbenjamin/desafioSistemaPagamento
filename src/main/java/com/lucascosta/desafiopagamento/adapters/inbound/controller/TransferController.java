@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.adapters.inbound;
+package com.lucascosta.desafiopagamento.adapters.inbound.controller;
 
 import com.lucascosta.desafiopagamento.adapters.inbound.dto.TransferRequest;
 import com.lucascosta.desafiopagamento.adapters.inbound.mapper.TransferDTOMapper;
