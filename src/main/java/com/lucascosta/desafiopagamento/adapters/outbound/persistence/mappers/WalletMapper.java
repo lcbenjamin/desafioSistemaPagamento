@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.util.mappers;
+package com.lucascosta.desafiopagamento.adapters.outbound.persistence.mappers;
 
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.entity.WalletEntity;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Wallet;

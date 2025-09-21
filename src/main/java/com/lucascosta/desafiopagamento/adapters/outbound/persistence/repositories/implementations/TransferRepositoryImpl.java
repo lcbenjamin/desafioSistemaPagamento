@@ -1,6 +1,6 @@
 package com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositories.implementations;
 
-import com.lucascosta.desafiopagamento.util.mappers.TransferMapper;
+import com.lucascosta.desafiopagamento.adapters.outbound.persistence.mappers.TransferEntityMapper;
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositories.JpaTransferRepository;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
 import com.lucascosta.desafiopagamento.core.ports.outbound.TransferRepositoryPort;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 public class TransferRepositoryImpl implements TransferRepositoryPort {
 
     private final JpaTransferRepository repository;
-    private final TransferMapper mapper;
+    private final TransferEntityMapper mapper;
 
-    public TransferRepositoryImpl(JpaTransferRepository repository, TransferMapper mapper) {
+    public TransferRepositoryImpl(JpaTransferRepository repository, TransferEntityMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

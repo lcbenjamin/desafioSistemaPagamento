@@ -1,6 +1,6 @@
 package com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositories.implementations;
 
-import com.lucascosta.desafiopagamento.util.mappers.WalletMapper;
+import com.lucascosta.desafiopagamento.adapters.outbound.persistence.mappers.WalletMapper;
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositories.JpaWalletRepository;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Wallet;
 import com.lucascosta.desafiopagamento.core.ports.outbound.WalletRepositoryPort;
