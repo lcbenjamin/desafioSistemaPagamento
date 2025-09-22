@@ -15,7 +15,7 @@ public final class TransferValidationChainFactory {
                 .add(new LoadPayerHandler(walletHolderRepository))
                 .add(new LoadPayeeHandler(walletHolderRepository))
                 .add(new PayerTypeValidationHandler())
-                .add(new SufficientBalanceHandler(walletRepository))
+                .add(new SufficientBalanceHandler())
                 .build();
     }
 }
