@@ -10,10 +10,12 @@ public final class TransferValidationChainFactory {
     }
 
     public static TransferHandler create(WalletHolderRepositoryPort walletHolderRepository, WalletRepositoryPort walletRepository) {
-        return new DistinctParticipantsHandler()
-                .linkWith(new LoadPayerHandler(walletHolderRepository))
-                .linkWith(new LoadPayeeHandler(walletHolderRepository))
-                .linkWith(new PayerTypeValidationHandler())
-                .linkWith(new SufficientBalanceHandler(walletRepository));
+        return TransferValidationChainBuilder.builder()
+                .add(new DistinctParticipantsHandler())
+                .add(new LoadPayerHandler(walletHolderRepository))
+                .add(new LoadPayeeHandler(walletHolderRepository))
+                .add(new PayerTypeValidationHandler())
+                .add(new SufficientBalanceHandler(walletRepository))
+                .build();
     }
 }
