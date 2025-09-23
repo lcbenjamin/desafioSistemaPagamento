@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.core.ports.inbound;
+package com.lucascosta.desafiopagamento.core.domain.payment.model;
 
 import java.time.Instant;
 
