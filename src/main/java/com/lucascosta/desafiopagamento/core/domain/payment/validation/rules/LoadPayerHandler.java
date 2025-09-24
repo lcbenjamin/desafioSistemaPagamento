@@ -5,7 +5,7 @@ import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferHa
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferValidationContext;
 import com.lucascosta.desafiopagamento.core.ports.outbound.WalletHolderRepositoryPort;
 
-import static com.lucascosta.desafiopagamento.core.domain.payment.utils.Constants.MSG_PAYER_NOT_FOUND;
+import static com.lucascosta.desafiopagamento.core.domain.utils.Constants.MSG_PAYER_NOT_FOUND;
 
 public class LoadPayerHandler extends TransferHandler {
 

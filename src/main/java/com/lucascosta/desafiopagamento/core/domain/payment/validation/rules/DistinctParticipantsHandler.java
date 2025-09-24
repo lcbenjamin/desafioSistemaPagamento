@@ -4,7 +4,7 @@ import com.lucascosta.desafiopagamento.core.domain.exceptions.ValidationExceptio
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferHandler;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferValidationContext;
 
-import static com.lucascosta.desafiopagamento.core.domain.payment.utils.Constants.MSG_SAME_PARTICIPANT;
+import static com.lucascosta.desafiopagamento.core.domain.utils.Constants.MSG_SAME_PARTICIPANT;
 
 public class DistinctParticipantsHandler extends TransferHandler {
 

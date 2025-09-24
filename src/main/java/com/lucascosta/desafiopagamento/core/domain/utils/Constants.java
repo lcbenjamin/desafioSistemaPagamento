@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.core.domain.payment.utils;
+package com.lucascosta.desafiopagamento.core.domain.utils;
 
 public class Constants {
 
