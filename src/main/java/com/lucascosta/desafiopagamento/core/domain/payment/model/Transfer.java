@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 public record Transfer(
+        Long id,
         Long payerId,
         Long payeeId,
         BigDecimal amount,
