@@ -2,7 +2,7 @@ package com.lucascosta.desafiopagamento.core.domain.payment.utils;
 
 public class Constants {
 
-    public static final String  MSG_SAME_PARTICIPANT = "O pagador e o recebedor devem ser diferentes.";
+    public static final String  MSG_SAME_PARTICIPANT = "O pagador e o recebedor não pode ser a mesma pessoa.";
     public static final String  MSG_PAYER_NOT_FOUND = "Pagador não encontrado.";
     public static final String  MSG_PAYEE_NOT_FOUND = "Recebedor não encontrado.";
     public static final String  MSG_PAYER_CANNOT_BE_MERCHANT = "O pagador não pode ser do tipo 'lojista'.";
@@ -13,5 +13,6 @@ public class Constants {
     public static final String  MSG_TRANSFER_FAILURE = "Falha ao realizar a transferência.";
 
     public static final String MSG_ERROR_LOAD_PAYER_CTX = "Pagador não carregado no contexto de validação.";
+    public static final String MSG_ERROR_LOAD_WALLET_CTX = "Carteira não carregado no contexto de validação.";
 
 }

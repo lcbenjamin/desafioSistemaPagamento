@@ -1,6 +1,6 @@
 package com.lucascosta.desafiopagamento.core.domain.payment.validation.rules;
 
-import com.lucascosta.desafiopagamento.core.domain.exceptions.DomainException;
+import com.lucascosta.desafiopagamento.core.domain.exceptions.UserNotFoundException;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferHandler;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferValidationContext;
 import com.lucascosta.desafiopagamento.core.ports.outbound.WalletHolderRepositoryPort;
@@ -20,7 +20,7 @@ public class LoadPayerHandler extends TransferHandler {
         var transfer = ctx.getTransfer();
         var payer = repository.findById(transfer.payerId());
         if (payer == null) {
-            throw new DomainException(MSG_PAYER_NOT_FOUND);
+            throw new UserNotFoundException(MSG_PAYER_NOT_FOUND);
         }
         ctx.setPayer(payer);
     }

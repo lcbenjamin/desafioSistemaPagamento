@@ -1,6 +1,6 @@
 package com.lucascosta.desafiopagamento.core.domain.payment.validation.rules;
 
-import com.lucascosta.desafiopagamento.core.domain.exceptions.DomainException;
+import com.lucascosta.desafiopagamento.core.domain.exceptions.ValidationException;
 import com.lucascosta.desafiopagamento.core.domain.payment.enums.WalletHolderKind;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferHandler;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferValidationContext;
@@ -14,10 +14,10 @@ public class PayerTypeValidationHandler extends TransferHandler {
     protected void doHandle(TransferValidationContext ctx) {
         var payer = ctx.getPayer();
         if (payer == null) {
-            throw new RuntimeException(MSG_ERROR_LOAD_PAYER_CTX);
+            throw new IllegalStateException(MSG_ERROR_LOAD_PAYER_CTX);
         }
         if (payer.kind().equals(WalletHolderKind.MERCHANT)) {
-            throw new DomainException(MSG_PAYER_CANNOT_BE_MERCHANT);
+            throw new ValidationException(MSG_PAYER_CANNOT_BE_MERCHANT);
         }
     }
 }
