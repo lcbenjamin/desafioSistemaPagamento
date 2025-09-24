@@ -27,7 +27,7 @@ public class TransferService implements TransferUseCase {
     @Override
     public TransferResult execute(Transfer transfer) {
         validateTransfer(transfer);
-        autorizeTransfer(transfer);
+        authorizeTransfer(transfer);
         return null;
     }
 
@@ -37,8 +37,8 @@ public class TransferService implements TransferUseCase {
                 .handle(new TransferValidationContext(transfer));
     }
 
-    private void autorizeTransfer(Transfer transfer) {
-        var authorizationResult = authorizationPort.authorize();
+    private void authorizeTransfer(Transfer transfer) {
+        var authorizationResult = authorizationPort.authorize(transfer);
         if (!authorizationResult.authorization()) {
             throw new ExternalTransferUnauthorizedException("Transferência não autorizada pelo sistema externo");
         }

@@ -1,6 +1,7 @@
 package com.lucascosta.desafiopagamento.adapters.outbound.authorization;
 
 import com.lucascosta.desafiopagamento.core.domain.payment.model.AuthorizationResult;
+import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
 import com.lucascosta.desafiopagamento.core.ports.outbound.TransferAuthorizationPort;
 import com.lucascosta.desafiopagamento.infrastructure.config.AuthorizationProperties;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class TransferAuthorizationPortAdapter implements TransferAuthorizationPo
     private final AuthorizationProperties props;
 
     @Override
-    public AuthorizationResult authorize() {
+    public AuthorizationResult authorize(Transfer transfer) {
         try {
             var apiResponse = authorizationRestClient.get()
                     .uri(uriBuilder -> uriBuilder
