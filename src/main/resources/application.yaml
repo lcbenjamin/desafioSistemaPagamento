@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: desafiopagamento
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/desafio_sis_pag
+    username: user
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: none
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/desafio_sis_pag
+    user: user
+    password: password
+    connect-retries: 3
+    databaseType: postgresql
+
+external:
+  authorization:
+    api:
+      base-url: https://util.devi.tools
+      path: /api/v2/authorize
+      connect-timeout: 2000
+      read-timeout: 3000
