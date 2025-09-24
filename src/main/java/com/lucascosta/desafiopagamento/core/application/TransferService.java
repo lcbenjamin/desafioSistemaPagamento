@@ -9,9 +9,7 @@ import com.lucascosta.desafiopagamento.core.ports.inbound.TransferUseCase;
 import com.lucascosta.desafiopagamento.core.ports.outbound.TransferAuthorizationPort;
 import com.lucascosta.desafiopagamento.core.ports.outbound.WalletHolderRepositoryPort;
 import com.lucascosta.desafiopagamento.core.ports.outbound.WalletRepositoryPort;
-import org.springframework.stereotype.Service;
 
-@Service // Unica referencia ao Spring no core, para ser injetado em outros lugares
 public class TransferService implements TransferUseCase {
 
     private final WalletHolderRepositoryPort walletHolderRepository;
@@ -30,12 +28,6 @@ public class TransferService implements TransferUseCase {
     public TransferResult execute(Transfer transfer) {
         validateTransfer(transfer);
         autorizeTransfer(transfer);
-
-
-        // TODO: debita o valor do pagador
-        // TODO: credita o valor no recebedor
-        // TODO: registra a transação
-        // TODO: Notifica atraves de sistema externo o pagador que a transação foi realizada com sucesso
         return null;
     }
 
