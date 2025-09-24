@@ -40,6 +40,6 @@ public class TransferAuthorizationPortAdapter implements TransferAuthorizationPo
             throw new IllegalStateException("Resposta nula do autorizador externo");
         }
         var data = Objects.requireNonNull(response.data(), "Campo 'data' ausente na resposta");
-        return new AuthorizationResult(response.status(), data.authorization);
+        return new AuthorizationResult(response.status(), data.authorization());
     }
 }
