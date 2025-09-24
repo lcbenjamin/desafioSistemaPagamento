@@ -1,13 +1,12 @@
 package com.lucascosta.desafiopagamento.core.domain.payment.validation.rules;
 
-import com.lucascosta.desafiopagamento.core.domain.exceptions.DomainException;
 import com.lucascosta.desafiopagamento.core.domain.exceptions.InvalidTransferAmountException;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferHandler;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferValidationContext;
 
 import java.math.BigDecimal;
 
-import static com.lucascosta.desafiopagamento.core.domain.payment.utils.Constants.*;
+import static com.lucascosta.desafiopagamento.core.domain.utils.Constants.*;
 
 public class SufficientBalanceHandler extends TransferHandler {
 
