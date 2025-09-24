@@ -7,9 +7,10 @@ spring:
     username: user
     password: password
   jpa:
-    hibernate:
-      ddl-auto: none
-      dialect: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   flyway:
     enabled: true
