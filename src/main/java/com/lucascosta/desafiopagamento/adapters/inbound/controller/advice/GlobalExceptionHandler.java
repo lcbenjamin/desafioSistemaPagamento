@@ -1,8 +1,6 @@
 package com.lucascosta.desafiopagamento.adapters.inbound.controller.advice;
 
-import com.lucascosta.desafiopagamento.core.domain.exceptions.ExternalTransferUnauthorizedException;
-import com.lucascosta.desafiopagamento.core.domain.exceptions.UserNotFoundException;
-import com.lucascosta.desafiopagamento.core.domain.exceptions.ValidationException;
+import com.lucascosta.desafiopagamento.core.domain.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -62,7 +60,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public  ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
         ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         pd.setTitle("Erro de validação da requisição");
         pd.setDetail("Um ou mais campos estão inválidos. Corrija e tente novamente.");
@@ -90,5 +88,32 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(pd);
     }
+
+    @ExceptionHandler(ExternalAuthorizationClientException.class)
+    public ResponseEntity<ProblemDetail> handleExternalAuthorizationClientException(ExternalAuthorizationClientException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_GATEWAY, ex.getMessage());
+        pd.setTitle("Erro ao comunicar com autorizador externo");
+        pd.setType(URI.create("urn:problem-type:bad-gateway-error"));
+        pd.setInstance(URI.create(request.getRequestURI()));
+        pd.setProperty("timestamp", Instant.now().toString());
+        pd.setProperty("code", "BAD_GATEWAY");
+        log.error("Bad gateway error at {}: {}", request.getRequestURI(), ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(pd);
+    }
+
+    @ExceptionHandler(ExternalAuthorizationCommunicationException.class)
+    public ResponseEntity<ProblemDetail> handleExternalAuthorizationCommunicationException(ExternalAuthorizationCommunicationException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        pd.setTitle("Erro de comunicação com autorizador externo");
+        pd.setType(URI.create("urn:problem-type:service-unvailable-error"));
+        pd.setInstance(URI.create(request.getRequestURI()));
+        pd.setProperty("timestamp", Instant.now().toString());
+        pd.setProperty("code", "SERVICE_UNAVAILABLE");
+        log.error("Service unvailable error at {}: {}", request.getRequestURI(), ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(pd);
+    }
+
 
 }
