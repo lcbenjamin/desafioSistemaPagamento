@@ -10,18 +10,16 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
@@ -70,7 +68,7 @@ public class GlobalExceptionHandler {
         pd.setDetail("Um ou mais campos estão inválidos. Corrija e tente novamente.");
         pd.setType(URI.create("urn:problem-type:validation-error"));
         pd.setInstance(URI.create(request.getRequestURI()));
-        pd.setProperty("timestamp", Instant.now());
+        pd.setProperty("timestamp", Instant.now().toString());
         pd.setProperty("code", "BAD_REQUEST");
         Map<String, String> errors = new HashMap<>();
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {

@@ -4,8 +4,9 @@ import com.lucascosta.desafiopagamento.adapters.outbound.persistence.mappers.Tra
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositories.JpaTransferRepository;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
 import com.lucascosta.desafiopagamento.core.ports.outbound.TransferRepositoryPort;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class TransferRepositoryImpl implements TransferRepositoryPort {
@@ -18,16 +19,16 @@ public class TransferRepositoryImpl implements TransferRepositoryPort {
         this.mapper = mapper;
     }
 
-    @Transactional
+
     @Override
     public Transfer save(Transfer transfer) {
         var entity = mapper.toEntity(transfer);
-        var saved = repository.save(entity);
-        return mapper.toModel(saved);
+        var savedEntity = repository.save(entity);
+        return mapper.toModel(savedEntity);
     }
 
     @Override
-    public Transfer findById(Long id) {
-        return repository.findById(id).map(mapper::toModel).orElse(null);
+    public Optional<Transfer> findById(Long id) {
+        return repository.findById(id).map(mapper::toModel);
     }
 }

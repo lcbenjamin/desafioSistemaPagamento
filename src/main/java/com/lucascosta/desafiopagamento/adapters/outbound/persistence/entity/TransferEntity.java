@@ -2,7 +2,6 @@ package com.lucascosta.desafiopagamento.adapters.outbound.persistence.entity;
 
 import com.lucascosta.desafiopagamento.core.domain.payment.enums.TransferStatus;
 import jakarta.persistence.*;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

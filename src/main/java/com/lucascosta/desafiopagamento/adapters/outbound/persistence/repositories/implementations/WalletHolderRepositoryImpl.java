@@ -4,8 +4,9 @@ import com.lucascosta.desafiopagamento.adapters.outbound.persistence.mappers.Wal
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositories.JpaWalletHolderRepository;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.WalletHolder;
 import com.lucascosta.desafiopagamento.core.ports.outbound.WalletHolderRepositoryPort;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class WalletHolderRepositoryImpl implements WalletHolderRepositoryPort {
@@ -19,22 +20,21 @@ public class WalletHolderRepositoryImpl implements WalletHolderRepositoryPort {
     }
 
     @Override
-    public WalletHolder findById(Long id) {
-        return repository.findById(id).map(mapper::toModel).orElse(null);
+    public Optional<WalletHolder> findById(Long id) {
+        return repository.findById(id).map(mapper::toModel);
     }
 
     @Override
-    public WalletHolder findByDocument(String document) {
-        return repository.findByDocument(document).map(mapper::toModel).orElse(null);
+    public Optional<WalletHolder> findByDocument(String document) {
+        return repository.findByDocument(document).map(mapper::toModel);
     }
 
     @Override
-    public WalletHolder findByEmail(String email) {
-        return repository.findByEmail(email).map(mapper::toModel).orElse(null);
+    public Optional<WalletHolder> findByEmail(String email) {
+        return repository.findByEmail(email).map(mapper::toModel);
     }
 
     @Override
-    @Transactional
     public WalletHolder save(WalletHolder holder) {
         return mapper.toModel(repository.save(mapper.toEntity(holder)));
     }

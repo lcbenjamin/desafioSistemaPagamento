@@ -2,13 +2,15 @@ package com.lucascosta.desafiopagamento.core.ports.outbound;
 
 import com.lucascosta.desafiopagamento.core.domain.payment.model.WalletHolder;
 
+import java.util.Optional;
+
 public interface WalletHolderRepositoryPort {
 
-    WalletHolder findById(Long id);
+    Optional<WalletHolder> findById(Long id);
 
-    WalletHolder findByDocument(String document);
+    Optional<WalletHolder> findByDocument(String document);
 
-    WalletHolder findByEmail(String email);
+    Optional<WalletHolder> findByEmail(String email);
 
     WalletHolder save(WalletHolder holder);
 

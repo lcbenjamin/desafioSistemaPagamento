@@ -19,9 +19,9 @@ public class LoadPayeeHandler extends TransferHandler {
     protected void doHandle(TransferValidationContext ctx) {
         var transfer = ctx.getTransfer();
         var payee = repository.findById(transfer.payeeId());
-        if (payee == null) {
+        if (payee.isEmpty()) {
             throw new UserNotFoundException(MSG_PAYEE_NOT_FOUND);
         }
-        ctx.setPayee(payee);
+        ctx.setPayee(payee.get());
     }
 }

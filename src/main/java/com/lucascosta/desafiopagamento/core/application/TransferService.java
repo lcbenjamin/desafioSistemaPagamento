@@ -1,6 +1,7 @@
 package com.lucascosta.desafiopagamento.core.application;
 
 import com.lucascosta.desafiopagamento.core.domain.exceptions.ExternalTransferUnauthorizedException;
+import com.lucascosta.desafiopagamento.core.domain.payment.enums.TransferStatus;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.TransferResult;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferValidationChainFactory;
@@ -9,6 +10,8 @@ import com.lucascosta.desafiopagamento.core.ports.inbound.TransferUseCase;
 import com.lucascosta.desafiopagamento.core.ports.outbound.TransferAuthorizationPort;
 import com.lucascosta.desafiopagamento.core.ports.outbound.WalletHolderRepositoryPort;
 import com.lucascosta.desafiopagamento.core.ports.outbound.WalletRepositoryPort;
+
+import java.time.Instant;
 
 public class TransferService implements TransferUseCase {
 
@@ -28,7 +31,19 @@ public class TransferService implements TransferUseCase {
     public TransferResult execute(Transfer transfer) {
         validateTransfer(transfer);
         authorizeTransfer(transfer);
-        return null;
+
+        return getSuccess(transfer);
+    }
+
+    private static TransferResult getSuccess(Transfer transfer) {
+        // Temporario, até implementar a persistência
+        return new TransferResult(
+                transfer.payerId(),
+                transfer.payeeId(),
+                TransferStatus.COMPLETED,
+                Instant.now(),
+                null
+        );
     }
 
     private void validateTransfer(Transfer transfer) {
