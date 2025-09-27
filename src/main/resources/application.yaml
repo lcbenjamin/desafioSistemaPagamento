@@ -23,7 +23,7 @@ spring:
 external:
   authorization:
     api:
-      base-url: https://util.devi.toolss
+      base-url: https://util.devi.tools
       path: /api/v2/authorize
       connect-timeout: 2000
       read-timeout: 3000

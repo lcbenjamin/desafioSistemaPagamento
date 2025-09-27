@@ -19,9 +19,10 @@ public class TransferService implements TransferUseCase {
     private final WalletRepositoryPort walletRepository;
     private final TransferAuthorizationPort authorizationPort;
 
-    public TransferService(WalletHolderRepositoryPort walletHolderRepository,
-                           WalletRepositoryPort walletRepository,
-                           TransferAuthorizationPort authorizationPort) {
+    public TransferService(
+            WalletHolderRepositoryPort walletHolderRepository,
+            WalletRepositoryPort walletRepository,
+            TransferAuthorizationPort authorizationPort) {
         this.walletHolderRepository = walletHolderRepository;
         this.walletRepository = walletRepository;
         this.authorizationPort = authorizationPort;

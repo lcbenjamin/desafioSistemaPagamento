@@ -1,10 +1,5 @@
 package com.lucascosta.desafiopagamento.core.domain.exceptions;
 
-/**
- * Exceção de domínio para erros 4xx (exceto o caso de 403 tratado como resposta de negócio)
- * ao chamar o autorizador externo. Representa um problema de requisição ou contrato
- * e não um erro transitório elegível a retry.
- */
 public class ExternalAuthorizationClientException extends DomainException {
 
     private final int statusCode;
