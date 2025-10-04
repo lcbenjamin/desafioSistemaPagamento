@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.infrastructure.usecase;
+package com.lucascosta.desafiopagamento.infrastructure.beans;
 
 import com.lucascosta.desafiopagamento.core.application.TransferService;
 import com.lucascosta.desafiopagamento.core.ports.inbound.TransferUseCase;

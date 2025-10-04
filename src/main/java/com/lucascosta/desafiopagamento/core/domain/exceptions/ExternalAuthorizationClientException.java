@@ -1,6 +1,6 @@
 package com.lucascosta.desafiopagamento.core.domain.exceptions;
 
-public class ExternalAuthorizationClientException extends DomainException {
+public class ExternalAuthorizationClientException extends RuntimeException {
 
     private final int statusCode;
     private final String rawBody;

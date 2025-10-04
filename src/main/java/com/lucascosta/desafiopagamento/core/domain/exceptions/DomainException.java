@@ -1,6 +1,6 @@
 package com.lucascosta.desafiopagamento.core.domain.exceptions;
 
-public class DomainException extends RuntimeException {
+sealed class DomainException extends RuntimeException permits  InsufficientFundsException, InvalidTransferAmountException, UnauthorizedTransferException, UserNotFoundException, ValidationException, WalletNotFoundException {
     public DomainException(String message) {
         super(message);
     }

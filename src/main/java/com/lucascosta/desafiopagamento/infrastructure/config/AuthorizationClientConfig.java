@@ -20,10 +20,13 @@ public class AuthorizationClientConfig {
                 .connectTimeout(Duration.ofSeconds(props.connectTimeout()))
                 .build();
 
+        JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(jdkHttpClient);
+        requestFactory.setReadTimeout(props.readTimeout());
+
         return RestClient.builder()
                 .baseUrl(props.baseUrl())
                 .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .requestFactory(new JdkClientHttpRequestFactory(jdkHttpClient))
+                .requestFactory(requestFactory)
                 .build();
     }
 

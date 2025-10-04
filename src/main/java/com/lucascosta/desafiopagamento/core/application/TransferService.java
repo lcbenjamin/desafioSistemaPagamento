@@ -1,6 +1,6 @@
 package com.lucascosta.desafiopagamento.core.application;
 
-import com.lucascosta.desafiopagamento.core.domain.exceptions.ExternalTransferUnauthorizedException;
+import com.lucascosta.desafiopagamento.core.domain.exceptions.UnauthorizedTransferException;
 import com.lucascosta.desafiopagamento.core.domain.payment.enums.TransferStatus;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.TransferResult;
@@ -32,7 +32,6 @@ public class TransferService implements TransferUseCase {
     public TransferResult execute(Transfer transfer) {
         validateTransfer(transfer);
         authorizeTransfer(transfer);
-
         return getSuccess(transfer);
     }
 
@@ -56,7 +55,7 @@ public class TransferService implements TransferUseCase {
     private void authorizeTransfer(Transfer transfer) {
         var authorizationResult = authorizationPort.authorize(transfer);
         if (!authorizationResult.authorization()) {
-            throw new ExternalTransferUnauthorizedException("Transferência não autorizada pelo sistema externo");
+            throw new UnauthorizedTransferException("Transferência não autorizada pelo sistema externo.");
         }
     }
 }

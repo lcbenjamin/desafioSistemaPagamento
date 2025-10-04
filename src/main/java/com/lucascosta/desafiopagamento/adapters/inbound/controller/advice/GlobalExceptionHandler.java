@@ -1,6 +1,8 @@
 package com.lucascosta.desafiopagamento.adapters.inbound.controller.advice;
 
-import com.lucascosta.desafiopagamento.core.domain.exceptions.*;
+import com.lucascosta.desafiopagamento.core.domain.exceptions.UnauthorizedTransferException;
+import com.lucascosta.desafiopagamento.core.domain.exceptions.UserNotFoundException;
+import com.lucascosta.desafiopagamento.core.domain.exceptions.ValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
 
 import java.net.URI;
 import java.time.Instant;
@@ -76,8 +80,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(pd);
     }
 
-    @ExceptionHandler(ExternalTransferUnauthorizedException.class)
-    public ResponseEntity<ProblemDetail> handleExternalTransferUnauthorizedException(ExternalTransferUnauthorizedException ex, HttpServletRequest request) {
+    @ExceptionHandler(UnauthorizedTransferException.class)
+    public ResponseEntity<ProblemDetail> handleUnauthorizedTransferException(UnauthorizedTransferException ex, HttpServletRequest request) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
         pd.setTitle("Transferência não autorizada");
         pd.setType(URI.create("urn:problem-type:forbidden-error"));
@@ -89,31 +93,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(pd);
     }
 
-    @ExceptionHandler(ExternalAuthorizationClientException.class)
-    public ResponseEntity<ProblemDetail> handleExternalAuthorizationClientException(ExternalAuthorizationClientException ex, HttpServletRequest request) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_GATEWAY, ex.getMessage());
-        pd.setTitle("Erro ao comunicar com autorizador externo");
-        pd.setType(URI.create("urn:problem-type:bad-gateway-error"));
-        pd.setInstance(URI.create(request.getRequestURI()));
-        pd.setProperty("timestamp", Instant.now().toString());
-        pd.setProperty("code", "BAD_GATEWAY");
-        log.error("Bad gateway error at {}: {}", request.getRequestURI(), ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(pd);
-    }
-
-    @ExceptionHandler(ExternalAuthorizationCommunicationException.class)
-    public ResponseEntity<ProblemDetail> handleExternalAuthorizationCommunicationException(ExternalAuthorizationCommunicationException ex, HttpServletRequest request) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
-        pd.setTitle("Erro de comunicação com autorizador externo");
-        pd.setType(URI.create("urn:problem-type:service-unvailable-error"));
+    @ExceptionHandler(ResourceAccessException.class)
+    public ResponseEntity<ProblemDetail> handleResourceAccessException(ResourceAccessException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, "Serviço externo indisponível. Tente novamente mais tarde.");
+        pd.setTitle("Serviço externo indisponível");
+        pd.setType(URI.create("urn:problem-type:service-unavailable"));
         pd.setInstance(URI.create(request.getRequestURI()));
         pd.setProperty("timestamp", Instant.now().toString());
         pd.setProperty("code", "SERVICE_UNAVAILABLE");
-        log.error("Service unvailable error at {}: {}", request.getRequestURI(), ex.getMessage());
+        log.error("Service unavailable error at {}: {}", request.getRequestURI(), ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(pd);
     }
-
 
 }

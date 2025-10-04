@@ -1,20 +1,18 @@
 package com.lucascosta.desafiopagamento.adapters.outbound.authorization;
 
 import com.lucascosta.desafiopagamento.adapters.outbound.mappers.AuthorizationResponseMapper;
-import com.lucascosta.desafiopagamento.core.domain.exceptions.ExternalAuthorizationClientException;
-import com.lucascosta.desafiopagamento.core.domain.exceptions.ExternalAuthorizationCommunicationException;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.AuthorizationResult;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
 import com.lucascosta.desafiopagamento.core.ports.outbound.TransferAuthorizationPort;
 import com.lucascosta.desafiopagamento.infrastructure.config.AuthorizationProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClient.RequestHeadersSpec.ConvertibleClientHttpResponse;
+
+import java.io.IOException;
 
 @Component("authorizationAdapter")
 @RequiredArgsConstructor
@@ -27,32 +25,19 @@ public class TransferAuthorizationPortAdapter implements TransferAuthorizationPo
 
     @Override
     public AuthorizationResult authorize(Transfer transfer) {
-        try {
-            var response = authorizationRestClient.get()
-                    .uri(props.path())
-                    .retrieve()
-                    .body(AuthorizationApiResponse.class);
-
-            return mapper.toDomain(response);
-
-        } catch (HttpClientErrorException ex) {
-            return getAuthorizationResult(ex);
-        } catch (RestClientException ex) {
-            throw new ExternalAuthorizationCommunicationException("Falha ao comunicar com autorizador externo", ex);
-        }
+        return authorizationRestClient.get()
+                .uri(props.path())
+                .exchange((request, response)
+                        -> getAuthorizationResult(response)
+                );
     }
 
-    @NotNull
-    private static AuthorizationResult getAuthorizationResult(HttpClientErrorException ex) {
-        if (ex.getStatusCode() == HttpStatus.FORBIDDEN) {
-            log.info("Autorização negada pelo autorizador externo (403).");
-            return new AuthorizationResult("fail", false);
+    private AuthorizationResult getAuthorizationResult(ConvertibleClientHttpResponse response) throws IOException {
+        if (response.getStatusCode() == HttpStatus.FORBIDDEN) {
+            log.info("Transferência não autorizada pelo autorizador de transações.");
+            return new AuthorizationResult("NEGADO", false);
         }
-        throw new ExternalAuthorizationClientException(
-                ex.getStatusCode().value(),
-                ex.getStatusText(),
-                ex.getResponseBodyAsString(),
-                ex
-        );
+        return mapper.toDomain(response.bodyTo(AuthorizationApiResponse.class));
     }
+
 }

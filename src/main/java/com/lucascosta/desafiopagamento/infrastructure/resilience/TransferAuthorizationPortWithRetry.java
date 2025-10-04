@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Primary
-public class AuthorizationPortWithRetry implements TransferAuthorizationPort {
+public class TransferAuthorizationPortWithRetry implements TransferAuthorizationPort {
 
     private final RetryExecutor retryExecutor;
     private final TransferAuthorizationPort delegate;
 
-    public AuthorizationPortWithRetry(
+    public TransferAuthorizationPortWithRetry(
             RetryExecutor retryExecutor,
             @Qualifier("authorizationAdapter") TransferAuthorizationPort delegate) {
         this.retryExecutor = retryExecutor;

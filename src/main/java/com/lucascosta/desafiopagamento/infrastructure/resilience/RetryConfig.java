@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.infrastructure.config;
+package com.lucascosta.desafiopagamento.infrastructure.resilience;
 
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;

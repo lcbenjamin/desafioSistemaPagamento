@@ -1,8 +1,6 @@
 package com.lucascosta.desafiopagamento.adapters.inbound.dto;
 
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 

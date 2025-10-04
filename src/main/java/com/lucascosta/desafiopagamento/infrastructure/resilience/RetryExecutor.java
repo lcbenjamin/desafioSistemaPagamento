@@ -46,21 +46,5 @@ public class RetryExecutor {
         return execute(retry, action);
     }
 
-    public void execute(String retryName, Runnable action) {
-        Retry retry = retryRegistry.retry(retryName);
-        execute(retry, action);
-    }
 
-    public String failureMessage(Retry retry) {
-        var metrics = retry.getMetrics();
-        long failedWithRetry = metrics.getNumberOfFailedCallsWithRetryAttempt();
-        if (failedWithRetry > 0) {
-            return "Falha após tentativas com retry ao comunicar com serviço externo";
-        }
-        return "Falha (sem retries elegíveis) ao comunicar com serviço externo";
-    }
-
-    public String failureMessage(String retryName) {
-        return failureMessage(retryRegistry.retry(retryName));
-    }
 }
