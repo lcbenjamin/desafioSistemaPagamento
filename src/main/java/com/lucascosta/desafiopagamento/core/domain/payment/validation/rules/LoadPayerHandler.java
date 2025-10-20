@@ -3,7 +3,7 @@ package com.lucascosta.desafiopagamento.core.domain.payment.validation.rules;
 import com.lucascosta.desafiopagamento.core.domain.exceptions.UserNotFoundException;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferHandler;
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.TransferValidationContext;
-import com.lucascosta.desafiopagamento.core.ports.outbound.WalletHolderRepositoryPort;
+import com.lucascosta.desafiopagamento.core.ports.outbound.persistence.WalletHolderRepositoryPort;
 
 import static com.lucascosta.desafiopagamento.core.domain.utils.Constants.MSG_PAYER_NOT_FOUND;
 

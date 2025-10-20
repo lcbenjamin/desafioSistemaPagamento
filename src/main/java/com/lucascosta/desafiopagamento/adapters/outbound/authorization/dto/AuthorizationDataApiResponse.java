@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.adapters.outbound.authorization;
+package com.lucascosta.desafiopagamento.adapters.outbound.authorization.dto;
 
 public record AuthorizationDataApiResponse(
         boolean authorization

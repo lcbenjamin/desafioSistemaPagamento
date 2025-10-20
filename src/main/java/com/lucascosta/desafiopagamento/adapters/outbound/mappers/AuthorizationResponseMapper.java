@@ -1,7 +1,7 @@
 package com.lucascosta.desafiopagamento.adapters.outbound.mappers;
 
 
-import com.lucascosta.desafiopagamento.adapters.outbound.authorization.AuthorizationApiResponse;
+import com.lucascosta.desafiopagamento.adapters.outbound.authorization.dto.AuthorizationApiResponse;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.AuthorizationResult;
 import org.springframework.stereotype.Component;
 

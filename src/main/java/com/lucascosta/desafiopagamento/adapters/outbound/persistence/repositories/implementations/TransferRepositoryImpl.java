@@ -3,7 +3,7 @@ package com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositori
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.mappers.TransferEntityMapper;
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositories.JpaTransferRepository;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
-import com.lucascosta.desafiopagamento.core.ports.outbound.TransferRepositoryPort;
+import com.lucascosta.desafiopagamento.core.ports.outbound.persistence.TransferRepositoryPort;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

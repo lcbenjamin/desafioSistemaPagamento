@@ -7,6 +7,8 @@ public record AuthorizationProperties(
         String baseUrl,
         String path,
         int connectTimeout,
-        int readTimeout
+        int responseTimeout,
+        int readTimeout,
+        int writeTimeout
 ) {
 }

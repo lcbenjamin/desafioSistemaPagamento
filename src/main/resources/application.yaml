@@ -27,7 +27,10 @@ external:
       base-url: http://127.0.0.1:3000
       path: /api/v2/authorize
       connect-timeout: 2000
+      response-timeout: 5000
       read-timeout: 3000
+      write-timeout: 3000
+
 
 resilience4j:
   retry:
@@ -36,9 +39,8 @@ resilience4j:
         max-attempts: 3 # 1 tentativa inicial + 2 retries
         wait-duration: 400ms
         retry-exceptions:
-          - org.springframework.web.client.ResourceAccessException
-          - java.io.IOException
-          - org.springframework.web.client.HttpServerErrorException
+          - com.lucascosta.desafiopagamento.core.domain.exceptions.RetryableAuthorizationException
         ignore-exceptions:
-          - org.springframework.web.client.HttpClientErrorException
+          - com.lucascosta.desafiopagamento.core.domain.exceptions.NonRetryableAuthorizationException
+          - com.lucascosta.desafiopagamento.core.domain.exceptions.UnknownAuthorizationException
         fail-after-max-attempts: true

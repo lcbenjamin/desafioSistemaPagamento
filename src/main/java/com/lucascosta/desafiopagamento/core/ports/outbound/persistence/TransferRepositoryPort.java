@@ -1,4 +1,4 @@
-package com.lucascosta.desafiopagamento.core.ports.outbound;
+package com.lucascosta.desafiopagamento.core.ports.outbound.persistence;
 
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
 

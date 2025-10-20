@@ -1,5 +1,6 @@
 package com.lucascosta.desafiopagamento.adapters.inbound.controller.advice;
 
+import com.lucascosta.desafiopagamento.core.domain.exceptions.RetryableAuthorizationException;
 import com.lucascosta.desafiopagamento.core.domain.exceptions.UnauthorizedTransferException;
 import com.lucascosta.desafiopagamento.core.domain.exceptions.UserNotFoundException;
 import com.lucascosta.desafiopagamento.core.domain.exceptions.ValidationException;
@@ -93,11 +94,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(pd);
     }
 
-    @ExceptionHandler(ResourceAccessException.class)
-    public ResponseEntity<ProblemDetail> handleResourceAccessException(ResourceAccessException ex, HttpServletRequest request) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, "Serviço externo indisponível. Tente novamente mais tarde.");
-        pd.setTitle("Serviço externo indisponível");
-        pd.setType(URI.create("urn:problem-type:service-unavailable"));
+    @ExceptionHandler(RetryableAuthorizationException.class)
+    public ResponseEntity<ProblemDetail> handleRetryableAuthorizationException(RetryableAuthorizationException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        pd.setTitle("Serviço de autorização indisponível");
+        pd.setType(URI.create("urn:problem-type:service-unavailable-error"));
         pd.setInstance(URI.create(request.getRequestURI()));
         pd.setProperty("timestamp", Instant.now().toString());
         pd.setProperty("code", "SERVICE_UNAVAILABLE");
@@ -105,5 +106,4 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(pd);
     }
-
 }

@@ -2,7 +2,7 @@ package com.lucascosta.desafiopagamento.infrastructure.resilience;
 
 import com.lucascosta.desafiopagamento.core.domain.payment.model.AuthorizationResult;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
-import com.lucascosta.desafiopagamento.core.ports.outbound.TransferAuthorizationPort;
+import com.lucascosta.desafiopagamento.core.ports.outbound.http.TransferAuthorizationPort;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;

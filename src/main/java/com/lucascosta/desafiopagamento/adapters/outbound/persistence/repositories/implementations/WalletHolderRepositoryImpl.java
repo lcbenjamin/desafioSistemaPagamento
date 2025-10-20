@@ -3,7 +3,7 @@ package com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositori
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.mappers.WalletHolderMapper;
 import com.lucascosta.desafiopagamento.adapters.outbound.persistence.repositories.JpaWalletHolderRepository;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.WalletHolder;
-import com.lucascosta.desafiopagamento.core.ports.outbound.WalletHolderRepositoryPort;
+import com.lucascosta.desafiopagamento.core.ports.outbound.persistence.WalletHolderRepositoryPort;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

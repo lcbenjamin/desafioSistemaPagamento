@@ -1,8 +1,8 @@
 package com.lucascosta.desafiopagamento.core.domain.payment.validation;
 
 import com.lucascosta.desafiopagamento.core.domain.payment.validation.rules.*;
-import com.lucascosta.desafiopagamento.core.ports.outbound.WalletHolderRepositoryPort;
-import com.lucascosta.desafiopagamento.core.ports.outbound.WalletRepositoryPort;
+import com.lucascosta.desafiopagamento.core.ports.outbound.persistence.WalletHolderRepositoryPort;
+import com.lucascosta.desafiopagamento.core.ports.outbound.persistence.WalletRepositoryPort;
 
 public final class TransferValidationChainFactory {
     private TransferValidationChainFactory() {
