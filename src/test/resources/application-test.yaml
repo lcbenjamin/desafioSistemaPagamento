@@ -12,3 +12,26 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
   flyway:
     enabled: false
+
+external:
+  authorization:
+    api:
+      base-url: http://localhost
+      path: /test
+      connect-timeout: 50ms
+      response-timeout: 200ms
+      read-timeout: 50ms
+      write-timeout: 50ms
+
+resilience4j:
+  retry:
+    instances:
+      authorizationApi:
+        max-attempts: 3
+        wait-duration: 5ms
+        retry-exceptions:
+          - com.lucascosta.desafiopagamento.core.domain.exceptions.RetryableAuthorizationException
+        ignore-exceptions:
+          - com.lucascosta.desafiopagamento.core.domain.exceptions.NonRetryableAuthorizationException
+          - com.lucascosta.desafiopagamento.core.domain.exceptions.UnknownAuthorizationException
+        fail-after-max-attempts: true

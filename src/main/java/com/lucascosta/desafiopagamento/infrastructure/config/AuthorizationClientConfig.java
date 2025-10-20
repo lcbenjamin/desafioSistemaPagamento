@@ -11,7 +11,7 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableConfigurationProperties(AuthorizationProperties.class)
@@ -21,11 +21,11 @@ public class AuthorizationClientConfig {
     public WebClient authorizationWebClient(AuthorizationProperties props) {
 
         HttpClient httpClient = HttpClient.create()
-                .responseTimeout(Duration.ofSeconds(props.responseTimeout()))
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, props.connectTimeout())
+                .responseTimeout(props.responseTimeout())
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Math.toIntExact(props.connectTimeout().toMillis()))
                 .doOnConnected(conn ->
-                        conn.addHandlerLast(new ReadTimeoutHandler(props.readTimeout()))
-                                .addHandlerLast(new WriteTimeoutHandler(props.writeTimeout()))
+                        conn.addHandlerLast(new ReadTimeoutHandler(props.readTimeout().toMillis(), TimeUnit.MILLISECONDS))
+                                .addHandlerLast(new WriteTimeoutHandler(props.writeTimeout().toMillis(), TimeUnit.MILLISECONDS))
                 );
 
         return WebClient.builder()
