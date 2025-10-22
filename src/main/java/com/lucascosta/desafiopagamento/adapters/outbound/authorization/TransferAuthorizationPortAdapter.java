@@ -9,27 +9,27 @@ import com.lucascosta.desafiopagamento.infrastructure.config.AuthorizationProper
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
 
-@Component
 @RequiredArgsConstructor
+@Component
 @Slf4j
 public class TransferAuthorizationPortAdapter implements TransferAuthorizationPort {
 
     private final AuthorizationProperties props;
     private final AuthorizationResponseMapper mapper;
-    private final WebClient webClient;
+    private final RestClient restClient;
 
     @Override
     public AuthorizationResult authorize(Transfer transfer) {
-        var authorizationResult = webClient.get()
+        AuthorizationApiResponse response = restClient
+                .get()
                 .uri(props.path())
                 .retrieve()
-                .bodyToMono(AuthorizationApiResponse.class)
-                .map(mapper::toDomain)
-                .block();
-        log.info("Resultado da autorização recebida: {}", authorizationResult);
-        return authorizationResult;
-    }
+                .body(AuthorizationApiResponse.class);
 
+        AuthorizationResult result = mapper.toDomain(response);
+        log.debug("Autorização externa respondida: status={}, authorization={}", result.status(), result.authorization());
+        return result;
+    }
 }

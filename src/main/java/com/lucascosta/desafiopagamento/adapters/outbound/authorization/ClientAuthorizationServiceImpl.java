@@ -4,6 +4,7 @@ import com.lucascosta.desafiopagamento.core.domain.exceptions.NonRetryableAuthor
 import com.lucascosta.desafiopagamento.core.domain.exceptions.RetryableAuthorizationException;
 import com.lucascosta.desafiopagamento.core.domain.exceptions.UnauthorizedTransferException;
 import com.lucascosta.desafiopagamento.core.domain.exceptions.UnknownAuthorizationException;
+import com.lucascosta.desafiopagamento.core.domain.payment.model.AuthorizationResult;
 import com.lucascosta.desafiopagamento.core.domain.payment.model.Transfer;
 import com.lucascosta.desafiopagamento.core.ports.outbound.http.TransferAuthorizationPort;
 import com.lucascosta.desafiopagamento.core.ports.outbound.service.ClientAuthorizationServicePort;
@@ -12,9 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClientRequestException;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.io.IOException;
 
@@ -28,7 +28,13 @@ public class ClientAuthorizationServiceImpl implements ClientAuthorizationServic
     @Override
     public void authorizeTransferOrThrowError(Transfer transfer) {
         try {
-            authorizationPort.authorize(transfer);
+            AuthorizationResult result = authorizationPort.authorize(transfer);
+            if (result == null) {
+                throw new UnknownAuthorizationException("Resposta nula do autorizador externo", null);
+            }
+            if (!result.authorization()) {
+                throw new UnauthorizedTransferException("Transferência não autorizada pelo serviço externo.");
+            }
         } catch (Exception e) {
             log.error("Erro ao autorizar transferência: {}", e.getMessage(), e);
             handleAuthorizationException(e);
@@ -41,38 +47,38 @@ public class ClientAuthorizationServiceImpl implements ClientAuthorizationServic
         }
 
         if (isHttpException(exception)) {
-            handleHttpException((WebClientResponseException) exception);
-            return;
+            handleHttpException((RestClientResponseException) exception);
+            return; // handleHttpException já lança exceção específica
         }
 
         throw new UnknownAuthorizationException("Exceção não mapeada durante autorização", exception);
     }
 
-
-    private void handleHttpException(WebClientResponseException exception) {
+    private void handleHttpException(RestClientResponseException exception) {
         HttpStatusCode statusCode = exception.getStatusCode();
+        String body = exception.getResponseBodyAsString();
 
-        if (statusCode == HttpStatus.FORBIDDEN) {
+        if (statusCode.equals(HttpStatus.FORBIDDEN)) {
             throw new UnauthorizedTransferException("Transferência não autorizada pelo autorizador de transações externo.");
         }
 
         if (statusCode.is5xxServerError()) {
-            throw new RetryableAuthorizationException("Erro interno do serviço de autorização (5xx)", exception);
+            throw new RetryableAuthorizationException("Erro interno do serviço de autorização (5xx): " + body, exception);
         }
 
         if (statusCode.is4xxClientError()) {
-            throw new NonRetryableAuthorizationException("Erro de cliente na autorização (4xx)", exception);
+            throw new NonRetryableAuthorizationException("Erro de cliente na autorização (4xx): " + body, exception);
         }
 
         throw new UnknownAuthorizationException("Status HTTP não mapeado: " + statusCode.value(), exception);
     }
 
     private boolean isNetworkException(Exception exception) {
-        return exception instanceof WebClientRequestException || exception instanceof IOException;
+        return exception instanceof ResourceAccessException || exception instanceof IOException;
     }
 
     private boolean isHttpException(Exception exception) {
-        return exception instanceof WebClientResponseException;
+        return exception instanceof RestClientResponseException;
     }
 
 }

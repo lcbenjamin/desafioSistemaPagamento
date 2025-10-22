@@ -1,38 +1,32 @@
 package com.lucascosta.desafiopagamento.infrastructure.config;
 
-import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
+import org.springframework.web.client.RestClient;
 
-import java.util.concurrent.TimeUnit;
+import java.net.http.HttpClient;
 
 @Configuration
 @EnableConfigurationProperties(AuthorizationProperties.class)
 public class AuthorizationClientConfig {
 
-    @Bean
-    public WebClient authorizationWebClient(AuthorizationProperties props) {
+    @Bean()
+    public RestClient authorizationRestClient(AuthorizationProperties props) {
+        HttpClient httpClient = HttpClient.newBuilder()
+                .connectTimeout(props.connectTimeout())
+                .build();
 
-        HttpClient httpClient = HttpClient.create()
-                .responseTimeout(props.responseTimeout())
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Math.toIntExact(props.connectTimeout().toMillis()))
-                .doOnConnected(conn ->
-                        conn.addHandlerLast(new ReadTimeoutHandler(props.readTimeout().toMillis(), TimeUnit.MILLISECONDS))
-                                .addHandlerLast(new WriteTimeoutHandler(props.writeTimeout().toMillis(), TimeUnit.MILLISECONDS))
-                );
+        JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+        requestFactory.setReadTimeout(props.readTimeout());
 
-        return WebClient.builder()
+        return RestClient.builder()
                 .baseUrl(props.baseUrl())
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .requestFactory(requestFactory)
                 .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
-
 }
